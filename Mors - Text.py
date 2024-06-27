@@ -71,7 +71,7 @@ def translator(text):
 
     if selection <1 or selection>3:
         print("Wrong selection, Retry")
-        translator()
+        translator(text)
         
     elif selection==2:
         replaceDict("•","–")
