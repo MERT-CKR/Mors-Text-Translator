@@ -6,7 +6,7 @@ def tr_lower(text):
 
 # • = 0
 # – = 1
-LetterDict={
+LetterDict = {
     "a":"01",
     "b":"1000",
     "c":"1010",
@@ -55,14 +55,29 @@ LetterDict={
     "8":"11100",
     "9":"11110",
     " ":" ",
-    
 }
+mors = ['11', '0', '010', '0000', '01', '1000', '01', '100', '0011', '10', '1011', '01']
 
-def replaceDict(x,y):
+def decode_to_text(text):
+    text = ""
+    unknown = []
+    for i in mors:
+        for key in LetterDict:
+            if LetterDict[key] == i:
+                text += key
+            else:
+                unknown.append(i)
+                text += "?"
+                text += " "
+    return [text,unknown]
+
+
+
+def change_format(x,y):#–,• = 0,1 || x,y etc.
     for i in LetterDict:
         LetterDict[i] = LetterDict[i].replace("0",x).replace("1",y)
         
-text="Merhaba dünya"
+text = "Merhaba dünya"
 def text_to_mors(text):
     print("wich pair do you prefer ?")
     print("1: 0,1")
@@ -74,12 +89,12 @@ def text_to_mors(text):
         print("Wrong selection, Retry")
         text_to_mors(text)
         
-    elif selection==2:
-        replaceDict("•","–")
-    elif selection==3:
+    elif selection == 2:
+        change_format("•","–")
+    elif selection == 3:
         x = input("Enter first character (•): ")
         y = input("Enter second character (–): \n>>")
-        replaceDict(x,y)
+        change_format(x,y)
     text = tr_lower(text)
     translated = ""
     unknown = []
@@ -97,27 +112,17 @@ def text_to_mors(text):
         print("Unknown characters: ", unknown)
     
 def mors_to_text():
-    mors=input("Type mors text here:\n>>")
-    x=input("First variable:")
-    y=input("Second variable:")
-    replaceDict("0","1")
-    replaceDict(x,y)
-    print(LetterDict)
-    mors=mors.split(" ")
-    translated = ""
-    unknown = []
+    mors = input("Type mors text here:\n>>")
+    x = input("First variable:")
+    y = input("Second variable:")
+    change_format("0","1")
+    change_format(x,y)
+    mors = mors.split(" ")
     
-    for i in mors:
-        if i in LetterDict:
-            for key in LetterDict:
-                if LetterDict[key]==i:
-                    translated += LetterDict[key]
-                    translated += " "
-                
-        else:
-            unknown.append(i)
-            translated += "?"
-            translated += " "
+    output = decode_to_text(mors)
+    translated = output[0]
+    unknown = output[1]
+    
             
     print(translated)
     if unknown != []:
@@ -127,15 +132,15 @@ def mors_to_text():
 
 def operations():
     selection = int(input("select the operation you want\n1. Text to mors\n2. Mors to text\n>> "))
-    if selection ==1:
+    if selection == 1:
         text_to_mors(text)#encrypt
-    elif selection==2:
+    elif selection == 2:
         mors_to_text()#decode
 
     else:
         print("invalid selection")
         operations
-    continueOp =input("do you want to do another operation ?\n1. Yes\n>> ")
+    continueOp = input("do you want to do another operation ?\n1. Yes\n>> ")
     if continueOp in ["Yes","yes","1"]:
         operations()
     else:
