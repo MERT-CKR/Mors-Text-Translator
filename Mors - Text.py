@@ -3,6 +3,7 @@ def tr_lower(text):
     for key, value in tr_dict.items():
         text = text.replace(key, value)
     return text.lower()
+
 # • = 0
 # – = 1
 LetterDict={
@@ -62,22 +63,22 @@ def replaceDict(x,y):
         LetterDict[i] = LetterDict[i].replace("0",x).replace("1",y)
         
 text="Merhaba dünya"
-def translator(text):
+def text_to_mors(text):
     print("wich pair do you prefer ?")
     print("1: 0,1")
     print("2: •,–")
-    print("3","special (DIY)")
+    print("3","special")
     selection = int(input("\n>>"))
 
     if selection <1 or selection>3:
         print("Wrong selection, Retry")
-        translator(text)
+        text_to_mors(text)
         
     elif selection==2:
         replaceDict("•","–")
     elif selection==3:
-        x = input("Enter first character: ")
-        y = input("Enter second character: \n>>")
+        x = input("Enter first character (•): ")
+        y = input("Enter second character (–): \n>>")
         replaceDict(x,y)
     text = tr_lower(text)
     translated = ""
@@ -95,5 +96,51 @@ def translator(text):
     if unknown != []:
         print("Unknown characters: ", unknown)
     
+def mors_to_text():
+    mors=input("Type mors text here:\n>>")
+    x=input("First variable:")
+    y=input("Second variable:")
+    replaceDict("0","1")
+    replaceDict(x,y)
+    print(LetterDict)
+    mors=mors.split(" ")
+    translated = ""
+    unknown = []
+    
+    for i in mors:
+        if i in LetterDict:
+            for key in LetterDict:
+                if LetterDict[key]==i:
+                    translated += LetterDict[key]
+                    translated += " "
+                
+        else:
+            unknown.append(i)
+            translated += "?"
+            translated += " "
+            
+    print(translated)
+    if unknown != []:
+        print("Unknown characters: ", unknown)
 
-translator(text)
+
+
+def operations():
+    selection = int(input("select the operation you want\n1. Text to mors\n2. Mors to text\n>> "))
+    if selection ==1:
+        text_to_mors(text)#encrypt
+    elif selection==2:
+        mors_to_text()#decode
+
+    else:
+        print("invalid selection")
+        operations
+    continueOp =input("do you want to do another operation ?\n1. Yes\n>> ")
+    if continueOp in ["Yes","yes","1"]:
+        operations()
+    else:
+        pass
+    
+operations()
+
+#uncomplated
