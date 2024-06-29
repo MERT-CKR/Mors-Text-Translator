@@ -1,5 +1,5 @@
-def tr_lower(text):
-    tr_dict = {'I':'ı', 'İ':'i', 'Ç':'ç', 'Ş':'ş', 'Ö':'ö', 'Ü':'ü', 'Ğ':'ğ'}
+def normalize(text):
+    tr_dict = {'I':'i', 'İ':'i', 'Ç':'ç', 'Ş':'ş', 'Ö':'ö', 'Ü':'ü', 'Ğ':'ğ', 'ı':'i' }
     for key, value in tr_dict.items():
         text = text.replace(key, value)
     return text.lower()
@@ -15,7 +15,6 @@ LetterDict = {
     "f":"0010",
     "g":"110",
     "h":"0000",
-    "ı":"00",
     "i":"00",
     "j":"0111",
     "k":"101",
@@ -56,20 +55,18 @@ LetterDict = {
     "9":"11110",
     " ":" ",
 }
-mors = ['11', '0', '010', '0000', '01', '1000', '01', '100', '0011', '10', '1011', '01']
 
-def decode_to_text(text):
+def decode_to_text(morse):
     text = ""
-    unknown = []
-    for i in mors:
+    for i in morse:
         for key in LetterDict:
             if LetterDict[key] == i:
                 text += key
-            else:
-                unknown.append(i)
-                text += "?"
+            if i == "":
                 text += " "
-    return [text,unknown]
+                while "  " in text:
+                    text=text.replace("  "," ")
+    return text
 
 
 
@@ -77,17 +74,19 @@ def change_format(x,y):#–,• = 0,1 || x,y etc.
     for i in LetterDict:
         LetterDict[i] = LetterDict[i].replace("0",x).replace("1",y)
         
-text = "Merhaba dünya"
-def text_to_mors(text):
-    print("wich pair do you prefer ?")
+
+
+def text_to_morse():
+    text = input("Which text would you like to convert to morse? \n>> ")
+    print("Wich pair do you prefer ?")
     print("1: 0,1")
     print("2: •,–")
-    print("3","special")
+    print("3","Special")
     selection = int(input("\n>>"))
 
     if selection <1 or selection>3:
         print("Wrong selection, Retry")
-        text_to_mors(text)
+        text_to_morse()
         
     elif selection == 2:
         change_format("•","–")
@@ -95,7 +94,7 @@ def text_to_mors(text):
         x = input("Enter first character (•): ")
         y = input("Enter second character (–): \n>>")
         change_format(x,y)
-    text = tr_lower(text)
+    text = normalize(text)
     translated = ""
     unknown = []
     for i in text:
@@ -111,31 +110,32 @@ def text_to_mors(text):
     if unknown != []:
         print("Unknown characters: ", unknown)
     
-def mors_to_text():
-    mors = input("Type mors text here:\n>>")
-    x = input("First variable:")
-    y = input("Second variable:")
-    change_format("0","1")
+def morse_to_text():
+    morse = input("Type morse text here:\n>>")
+    x = input("First variable:\n>>")
+    y = input("Second variable:\n>>")
     change_format(x,y)
-    mors = mors.split(" ")
+    morse = morse.split(" ")
     
-    output = decode_to_text(mors)
-    translated = output[0]
-    unknown = output[1]
-    
-            
+    translated = decode_to_text(morse)
+    print("Output: ")
     print(translated)
-    if unknown != []:
-        print("Unknown characters: ", unknown)
+    
+    print("Alternative:")
+    change_format(y,x)
+    translated = decode_to_text(morse)
+    print(translated)
 
 
 
 def operations():
-    selection = int(input("select the operation you want\n1. Text to mors\n2. Mors to text\n>> "))
+    change_format("0","1")
+    selection = int(input("Select the operation you want\n1. Text -> morse\n2. Morse -> text\n>> "))
     if selection == 1:
-        text_to_mors(text)#encrypt
+        text_to_morse()#encrypt
     elif selection == 2:
-        mors_to_text()#decode
+        print("Be sure all characters separated by spaces")
+        morse_to_text()#decode
 
     else:
         print("invalid selection")
@@ -145,7 +145,5 @@ def operations():
         operations()
     else:
         pass
-    
-operations()
 
-#uncomplated
+operations()
