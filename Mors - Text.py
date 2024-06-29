@@ -78,7 +78,7 @@ def change_format(x,y):#–,• = 0,1 || x,y etc.
 
 def text_to_morse():
     text = input("Which text would you like to convert to morse? \n>> ")
-    print("Wich pair do you prefer ?")
+    print("Which pair do you prefer ?")
     print("1: 0,1")
     print("2: •,–")
     print("3","Special")
